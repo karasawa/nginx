@@ -1,0 +1,17 @@
+{
+	"name": "backend",
+	"dockerComposeFile": "../docker-compose.yml",
+	"workspaceFolder": "/backend",
+	"service": "backend",
+	"runServices": [
+		"backend"
+		// "db",
+		// "pgadmin4"
+	],
+	// リモート先のVS Codeにインストールする拡張機能
+	"extensions": [
+		"ms-python.python",
+        "esbenp.prettier-vscode"
+	],
+	"shutdownAction": "stopCompose"
+}

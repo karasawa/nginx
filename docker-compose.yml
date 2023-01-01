@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  frontend:
+    build: ./frontend/
+    container_name: frontend
+    tty: true
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - 3000:3000
+    environment:
+      - WATCHPACK_POLLING=true
+
+  backend:
+    build: ./backend/
+    container_name: backend
+    tty: true
+    volumes:
+      - ./backend:/backend
+    ports:
+      - 8000:8000
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    tty: true
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+
+  db:
+    image: postgres
+    container_name: db
+    tty: true
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    tty: true
+    ports:
+      - 8888:80
+    volumes:
+      - pgadmin4_data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    hostname: pgadmin4
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+  pgadmin4_data:
